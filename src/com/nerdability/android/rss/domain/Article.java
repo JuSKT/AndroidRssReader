@@ -18,7 +18,26 @@ public class Article implements Serializable {
 	private boolean read;
 	private boolean offline;
 	private long dbId;
+	
+	
 
+	public Article() {
+		super();
+	}
+
+	public Article(String title, String description,
+			String pubDate, String author, URL url, String encodedContent,
+			boolean read, boolean offline) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.pubDate = pubDate;
+		this.author = author;
+		this.url = url;
+		this.encodedContent = encodedContent;
+		this.read = read;
+		this.offline = offline;
+	}
 
 	public String getGuid() {
 		return guid;

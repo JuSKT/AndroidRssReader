@@ -1,9 +1,12 @@
+/gen
+/bin
+
 *.class
 
 # Package Files #
-*.jar
 *.war
 *.ear
 .project
 .classpath
+.settings
 bin

@@ -63,7 +63,8 @@ public class ArticleDetailFragment extends Fragment {
         	String content = displayedArticle.getEncodedContent();
         	((TextView) rootView.findViewById(R.id.article_title)).setText(title);
         	((TextView) rootView.findViewById(R.id.article_author)).setText(pubDate);
-            ((TextView) rootView.findViewById(R.id.article_detail)).setText(Html.fromHtml(content));
+//            ((TextView) rootView.findViewById(R.id.article_detail)).setText(Html.fromHtml(content));
+            ((TextView) rootView.findViewById(R.id.article_detail)).setText((content));
         }
         return rootView;
     }
