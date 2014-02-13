@@ -21,6 +21,7 @@ import com.nerdability.android.ArticleListFragment;
 import com.nerdability.android.adapter.ArticleListAdapter;
 import com.nerdability.android.db.DbAdapter;
 import com.nerdability.android.rss.domain.Article;
+import com.nerdability.android.rss.domain.ArticleContent;
 import com.nerdability.android.rss.parser.RssHandler;
 
 
@@ -49,6 +50,8 @@ public class RssService extends AsyncTask<String, Void, List<Article>> {
 		articleListFrag.getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+//				ArticleContent.ITEMS.clear();
+//				ArticleContent.ITEMS_MAP.clear();
 				for (Article a : articles){
 					Log.d("DB", "Searching DB for GUID: " + a.getGuid());
 					DbAdapter dba = new DbAdapter(articleListFrag.getActivity());
@@ -59,18 +62,26 @@ public class RssService extends AsyncTask<String, Void, List<Article>> {
 						Log.d("DB", "Found entry for first time: " + a.getTitle());
 						dba = new DbAdapter(articleListFrag.getActivity());
 			            dba.openToWrite();
-			            dba.insertBlogListing(a.getGuid());
+//			            dba.insertBlogListing(a.getGuid());
+			            dba.insertBlogListingWithData(a.getGuid(), 
+			            		a.getTitle(), 
+			            		a.getDescription(), 
+			            		a.getPubDate(), 
+			            		a.getAuthor(), 
+			            		a.getUrl(), 
+			            		a.getEncodedContent());			            
 			            dba.close();
 					}else{
 						a.setDbId(fetchedArticle.getDbId());
 						a.setOffline(fetchedArticle.isOffline());
 						a.setRead(fetchedArticle.isRead());
 					}
+//					ArticleContent.addItem(a);
 				}
+				
 				ArticleListAdapter adapter = new ArticleListAdapter(articleListFrag.getActivity(), articles);
 				articleListFrag.setListAdapter(adapter);
 				adapter.notifyDataSetChanged();
-				
 			}
 		});
 		progress.dismiss();
@@ -80,6 +91,8 @@ public class RssService extends AsyncTask<String, Void, List<Article>> {
 	@Override
 	protected List<Article> doInBackground(String... urls) {
 		String feed = urls[0];
+		
+		RssHandler rh = new RssHandler();
 
 		URL url = null;
 		try {
@@ -89,7 +102,7 @@ public class RssService extends AsyncTask<String, Void, List<Article>> {
 			XMLReader xr = sp.getXMLReader();
 
 			url = new URL(feed);
-			RssHandler rh = new RssHandler();
+			
 
 			xr.setContentHandler(rh);
 			xr.parse(new InputSource(url.openStream()));
@@ -107,7 +120,7 @@ public class RssService extends AsyncTask<String, Void, List<Article>> {
 			Log.e("RSS Handler Parser Config", e.toString());
 		}
 
-		return null;
+		return rh.getArticleList();
 
 	}
 }

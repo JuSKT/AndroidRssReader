@@ -19,8 +19,6 @@ public class Article implements Serializable {
 	private boolean offline;
 	private long dbId;
 	
-	
-
 	public Article() {
 		super();
 	}
@@ -120,8 +118,10 @@ public class Article implements Serializable {
 	}
 
 	private String extractCData(String data){
-		data = data.replaceAll("<!\\[CDATA\\[", "");
-		data = data.replaceAll("\\]\\]>", "");
+		if(data != null){
+			data = data.replaceAll("<!\\[CDATA\\[", "");
+			data = data.replaceAll("\\]\\]>", "");
+		}
 		return data;
 	}
 

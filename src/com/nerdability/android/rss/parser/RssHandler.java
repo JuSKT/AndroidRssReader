@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -19,6 +20,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import android.util.Log;
 
 import com.nerdability.android.rss.domain.Article;
+import com.nerdability.android.rss.domain.ArticleContent;
 
 
 public class RssHandler extends DefaultHandler {
@@ -48,8 +50,14 @@ public class RssHandler extends DefaultHandler {
 	public List<Article> getArticleList() {
 		return articleList;
 	}
-
-
+	
+//	public List<Article> getArticleList() {
+//		return ArticleContent.ITEMS;
+//	}
+	
+//	public Map<String, Article> getArticleMap() {
+//		return ArticleContent.ITEMS_MAP;
+//	}
 
 	/* 
 	 * This method is called everytime a start element is found (an opening XML marker)
@@ -154,6 +162,7 @@ public class RssHandler extends DefaultHandler {
 			currentArticle.setGuid(sb.toString());
 
 			articleList.add(currentArticle);
+//			ArticleContent.addItem(currentArticle);
 
 			currentArticle = new Article("This article has no title", 
 					"This article has no description", 

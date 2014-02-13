@@ -22,6 +22,7 @@ import com.nerdability.android.R;
 import com.nerdability.android.adapter.ArticleListAdapter;
 import com.nerdability.android.db.DbAdapter;
 import com.nerdability.android.rss.domain.Article;
+import com.nerdability.android.rss.domain.ArticleContent;
 import com.nerdability.android.util.DateUtils;
 
 public class ArticleDetailFragment extends Fragment {
@@ -84,9 +85,11 @@ public class ArticleDetailFragment extends Fragment {
         	return true;
         } else if (id == R.id.actionbar_markunread) {
             db.openToWrite();
-            db.markAsUnread(displayedArticle.getGuid());
+            db.markAsUnread(displayedArticle.getGuid()); 
             db.close();
             displayedArticle.setRead(false);
+//            ArticleContent.modify(displayedArticle);
+            
             ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.article_list)).getListAdapter();
             adapter.notifyDataSetChanged();
         	return true;

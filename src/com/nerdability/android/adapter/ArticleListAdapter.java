@@ -38,7 +38,6 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 		View rowView = inflater.inflate(R.layout.fragment_article_list, null);
 		Article article = getItem(position);
 		
-
 		TextView textView = (TextView) rowView.findViewById(R.id.article_title_text);
 		textView.setText(article.getTitle());
 		
