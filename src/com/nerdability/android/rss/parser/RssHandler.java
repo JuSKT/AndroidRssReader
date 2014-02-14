@@ -2,25 +2,14 @@ package com.nerdability.android.rss.parser;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import android.util.Log;
-
 import com.nerdability.android.rss.domain.Article;
-import com.nerdability.android.rss.domain.ArticleContent;
 
 
 public class RssHandler extends DefaultHandler {
@@ -38,10 +27,10 @@ public class RssHandler extends DefaultHandler {
 	private List<Article> articleList = new ArrayList<Article>();
 
 	// Number of articles added so far
-	private int articlesAdded = 0;
+//	private int articlesAdded = 0;
 
 	// Number of articles to download
-	private static final int ARTICLES_LIMIT = 15;
+//	private static final int ARTICLES_LIMIT = 15;
 
 	//Current characters being accumulated
 	StringBuffer chars = new StringBuffer();
@@ -146,20 +135,7 @@ public class RssHandler extends DefaultHandler {
 		// Check if looking for article, and if article is complete
 		if (localName.equalsIgnoreCase("item")) {
 			
-			MessageDigest md = null;
-	        StringBuffer sb = new StringBuffer();
-			try {
-				md = MessageDigest.getInstance("MD5");
-				
-				md.update(currentArticle.getTitle().getBytes());
-		        byte byteData[] = md.digest();
-		        for (int i = 0; i < byteData.length; i++) {
-		        	sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-		        }
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
-			currentArticle.setGuid(sb.toString());
+			currentArticle.setGuid(Article.md5(currentArticle.getTitle()));
 
 			articleList.add(currentArticle);
 //			ArticleContent.addItem(currentArticle);
@@ -187,7 +163,7 @@ public class RssHandler extends DefaultHandler {
 //			}
 
 			// Lets check if we've hit our limit on number of articles
-			articlesAdded++;
+//			articlesAdded++;
 //			if (articlesAdded >= ARTICLES_LIMIT)
 //			{
 //				throw new SAXException();

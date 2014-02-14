@@ -1,6 +1,7 @@
 package com.nerdability.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.Menu;
@@ -9,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
-import com.nerdability.android.R;
 import com.nerdability.android.rss.RssService;
 
 public class ArticleListFragment extends ListFragment {
@@ -106,6 +106,10 @@ public class ArticleListFragment extends ListFragment {
         if (id == R.id.actionbar_refresh) {
         	refreshList();
         	return true;
+        }
+        else if(id == R.id.actionbar_settings){
+        	Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
+        	startActivity(settingsIntent);
         }
         return false;
     }

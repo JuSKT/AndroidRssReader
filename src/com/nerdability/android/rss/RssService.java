@@ -76,7 +76,14 @@ public class RssService extends AsyncTask<String, Void, List<Article>> {
 						a.setOffline(fetchedArticle.isOffline());
 						a.setRead(fetchedArticle.isRead());
 					}
-//					ArticleContent.addItem(a);
+					ArticleContent.addItem(a);
+				}
+
+				if(articles == null || articles.isEmpty()){
+					DbAdapter dba = new DbAdapter(articleListFrag.getActivity());
+		            dba.openToRead();
+		            articles.addAll(dba.getAllArticles());
+		            dba.close();
 				}
 				
 				ArticleListAdapter adapter = new ArticleListAdapter(articleListFrag.getActivity(), articles);

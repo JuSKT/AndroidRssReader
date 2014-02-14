@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,11 +17,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nerdability.android.R;
 import com.nerdability.android.adapter.ArticleListAdapter;
 import com.nerdability.android.db.DbAdapter;
 import com.nerdability.android.rss.domain.Article;
-import com.nerdability.android.rss.domain.ArticleContent;
 import com.nerdability.android.util.DateUtils;
 
 public class ArticleDetailFragment extends Fragment {
@@ -90,8 +87,17 @@ public class ArticleDetailFragment extends Fragment {
             displayedArticle.setRead(false);
 //            ArticleContent.modify(displayedArticle);
             
-            ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.article_list)).getListAdapter();
-            adapter.notifyDataSetChanged();
+//            ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.article_list)).getListAdapter();
+            
+            ArticleListFragment frag = ((ArticleListFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.article_list));
+//            ArticleListFragment frag = ((ArticleListFragment) ((ArticleListFragment) getFragmentManager().findFragmentById(R.id.article_list)));
+            if(frag != null){
+            	ArticleListAdapter adapter = (ArticleListAdapter) frag.getListAdapter();
+                adapter.notifyDataSetChanged();
+            }else{
+            	Log.d("REFRESH : ", "NO REFRESH DATA LIST");
+            }
+            
         	return true;
         } else {
         	return super.onOptionsItemSelected(item);
