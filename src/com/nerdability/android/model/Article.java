@@ -1,4 +1,4 @@
-package com.nerdability.android.rss.domain;
+package com.nerdability.android.model;
 
 import java.io.Serializable;
 import java.net.URL;
@@ -6,7 +6,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Article implements Serializable {
-	
+
 	public static final String KEY = "ARTICLE";
 
 	private static final long serialVersionUID = 1L;
@@ -20,14 +20,14 @@ public class Article implements Serializable {
 	private boolean read;
 	private boolean offline;
 	private long dbId;
-	
+
 	public Article() {
 		super();
 	}
 
-	public Article(String title, String description,
-			String pubDate, String author, URL url, String encodedContent,
-			boolean read, boolean offline) {
+	public Article(String title, String description, String pubDate,
+			String author, URL url, String encodedContent, boolean read,
+			boolean offline) {
 		super();
 		this.title = title;
 		this.description = description;
@@ -94,7 +94,7 @@ public class Article implements Serializable {
 	public String getEncodedContent() {
 		return encodedContent;
 	}
-	
+
 	public boolean isRead() {
 		return read;
 	}
@@ -119,25 +119,26 @@ public class Article implements Serializable {
 		this.dbId = dbId;
 	}
 
-	private String extractCData(String data){
-		if(data != null){
+	private String extractCData(String data) {
+		if (data != null) {
 			data = data.replaceAll("<!\\[CDATA\\[", "");
 			data = data.replaceAll("\\]\\]>", "");
 		}
 		return data;
 	}
-	
-	public static String md5(String str){
+
+	public static String md5(String str) {
 		MessageDigest md = null;
-        StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer();
 		try {
 			md = MessageDigest.getInstance("MD5");
-			
+
 			md.update(str.getBytes());
-	        byte byteData[] = md.digest();
-	        for (int i = 0; i < byteData.length; i++) {
-	        	sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-	        }
+			byte byteData[] = md.digest();
+			for (int i = 0; i < byteData.length; i++) {
+				sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16)
+						.substring(1));
+			}
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}

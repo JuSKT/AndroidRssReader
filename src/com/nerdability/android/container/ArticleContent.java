@@ -1,11 +1,11 @@
-package com.nerdability.android.rss.domain;
+package com.nerdability.android.container;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import com.nerdability.android.model.Article;
 
 /**
  * Helper class for providing sample content for user interfaces
@@ -26,12 +26,12 @@ public class ArticleContent {
 		ITEMS.add(article);
 		ITEMS_MAP.put(article.getGuid(), article);
 	}
-	
-	public static void modify(Article article){
+
+	public static void modify(Article article) {
 		ITEMS_MAP.remove(article.getGuid());
 		ITEMS_MAP.put(article.getGuid(), article);
 		ITEMS.clear();
 		ITEMS.addAll(ITEMS_MAP.values());
 	}
-	
+
 }

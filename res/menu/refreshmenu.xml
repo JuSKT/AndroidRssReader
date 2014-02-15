@@ -6,7 +6,7 @@
           android:showAsAction="ifRoom|withText"/>
 	
 	<item android:id="@+id/actionbar_settings"
-         android:icon="@drawable/starred"
+         android:icon="@drawable/ic_action_settings"
          android:title="@string/btn_settings"
          android:showAsAction="ifRoom|withText"/>
 </menu>

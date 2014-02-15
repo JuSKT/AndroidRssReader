@@ -34,6 +34,10 @@
             android:name="com.nerdability.android.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        
+        <service android:name="com.nerdability.android.rss.service.RssRefreshService" >
+        </service>
+        
     </application>
 
 </manifest>
