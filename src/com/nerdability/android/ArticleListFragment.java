@@ -1,8 +1,6 @@
 package com.nerdability.android;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -11,10 +9,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.nerdability.android.adapter.ArticleListAdapter;
-import com.nerdability.android.rss.service.RssRefreshService;
+import com.nerdability.android.container.ArticleContent;
+import com.nerdability.android.db.DbAdapter;
+import com.nerdability.android.model.Article;
 import com.nerdability.android.rss.task.RssRefreshTask;
 
 public class ArticleListFragment extends ListFragment {
@@ -43,7 +42,20 @@ public class ArticleListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		refreshList();
+
+		DbAdapter dba = new DbAdapter(getActivity());
+		dba.openToRead();
+		for (Article article : dba.getAllArticles()) {
+			ArticleContent.addItem(article);
+		}
+		dba.close();
+
+		ArticleListAdapter adapter = new ArticleListAdapter(getActivity(),
+				ArticleContent.ITEMS);
+		this.setListAdapter(adapter);
+		adapter.notifyDataSetChanged();
+
+		// refreshList();
 	}
 
 	@Override

@@ -20,28 +20,14 @@ public class RssHandler extends DefaultHandler {
 			"This article has no author", null, "This article has no content",
 			false, false);
 
-	private List<Article> articleList = new ArrayList<Article>();
-
-	// Number of articles added so far
-	// private int articlesAdded = 0;
-
-	// Number of articles to download
-	// private static final int ARTICLES_LIMIT = 15;
-
 	// Current characters being accumulated
 	StringBuffer chars = new StringBuffer();
 
+	List<Article> articles = new ArrayList<Article>();
+
 	public List<Article> getArticleList() {
-		return articleList;
+		return articles;
 	}
-
-	// public List<Article> getArticleList() {
-	// return ArticleContent.ITEMS;
-	// }
-
-	// public Map<String, Article> getArticleMap() {
-	// return ArticleContent.ITEMS_MAP;
-	// }
 
 	/*
 	 * This method is called everytime a start element is found (an opening XML
@@ -118,55 +104,18 @@ public class RssHandler extends DefaultHandler {
 
 		}
 
-		// if (localName.equalsIgnoreCase("title")){
-		// currentArticle.setTitle(chars.toString());
-		// } else if (localName.equalsIgnoreCase("description")){
-		// currentArticle.setDescription(chars.toString());
-		// } else if (localName.equalsIgnoreCase("published")){
-		// currentArticle.setPubDate(chars.toString());
-		// } else if (localName.equalsIgnoreCase("id")){
-		// currentArticle.setGuid(chars.toString());
-		// } else if (localName.equalsIgnoreCase("author")){
-		// currentArticle.setAuthor(chars.toString());
-		// } else if (localName.equalsIgnoreCase("content")){
-		// currentArticle.setEncodedContent(chars.toString());
-		// } else if (localName.equalsIgnoreCase("entry")){
-		//
-		// }
-
 		// Check if looking for article, and if article is complete
 		if (localName.equalsIgnoreCase("item")) {
 
 			currentArticle.setGuid(Article.md5(currentArticle.getTitle()));
 
-			articleList.add(currentArticle);
-			// ArticleContent.addItem(currentArticle);
+			articles.add(currentArticle);
 
 			currentArticle = new Article("This article has no title",
 					"This article has no description",
 					"This article has no publication date",
 					"This article has no author", null,
 					"This article has no content", false, false);
-
-			// currentArticle.setAuthor("This article has no author");
-			// currentArticle.setDescription("This article has no description");
-			// currentArticle.setEncodedContent("This article has no content");
-			// currentArticle.setOffline(false);
-			// currentArticle.setPubDate("This article has no publication date");
-			// currentArticle.setRead(false);
-			// currentArticle.setTitle("This article has no title");
-			// try {
-			// currentArticle.setUrl(new URL("http://www.no.url"));
-			// } catch (MalformedURLException e) {
-			// e.printStackTrace();
-			// }
-
-			// Lets check if we've hit our limit on number of articles
-			// articlesAdded++;
-			// if (articlesAdded >= ARTICLES_LIMIT)
-			// {
-			// throw new SAXException();
-			// }
 		}
 	}
 

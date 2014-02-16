@@ -12,10 +12,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import android.app.Activity;
-import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Binder;
+import android.os.IBinder;
 import android.util.Log;
 
 import com.nerdability.android.container.ArticleContent;
@@ -23,20 +24,13 @@ import com.nerdability.android.db.DbAdapter;
 import com.nerdability.android.model.Article;
 import com.nerdability.android.rss.parser.RssHandler;
 
-public class RssRefreshService extends IntentService {
-
-	private int result = Activity.RESULT_CANCELED;
-	public static final String RESULT = "result";
-	public static final String NOTIFICATION = "com.nerdability.android.receiver";
+public class RssAutoRefreshService extends Service {
 
 	private static final String BLOG_URL = "http://www.ombudsman.europa.eu/rss/rss.xml";
-
-	public RssRefreshService() {
-		super("RssRefreshService");
-	}
+	private final IBinder mBinder = new MyBinder();
 
 	@Override
-	protected void onHandleIntent(Intent intent) {
+	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		new AsyncTask<String, Void, List<Article>>() {
 
@@ -62,8 +56,6 @@ public class RssRefreshService extends IntentService {
 						ArticleContent.addItem(a);
 					}
 				}
-				result = Activity.RESULT_OK;
-				publishResults(result);
 			}
 
 			@Override
@@ -98,15 +90,18 @@ public class RssRefreshService extends IntentService {
 			}
 		}.execute(BLOG_URL);
 
-		// if (newData) {
-		// publishResults(result);
-		// }
+		return Service.START_NOT_STICKY;
 	}
 
-	private void publishResults(int result) {
-		Intent intent = new Intent(NOTIFICATION);
-		intent.putExtra(RESULT, result);
-		sendBroadcast(intent);
+	@Override
+	public IBinder onBind(Intent arg0) {
+		return mBinder;
+	}
+
+	public class MyBinder extends Binder {
+		public RssAutoRefreshService getService() {
+			return RssAutoRefreshService.this;
+		}
 	}
 
 }

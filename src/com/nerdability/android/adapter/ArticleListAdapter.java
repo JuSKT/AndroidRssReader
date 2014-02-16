@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nerdability.android.R;
+import com.nerdability.android.container.ArticleContent;
 import com.nerdability.android.model.Article;
 import com.nerdability.android.util.DateUtils;
 
@@ -61,7 +62,20 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 			row.setBackgroundColor(Color.WHITE);
 			textView.setTypeface(Typeface.DEFAULT_BOLD);
 		}
-		return rowView;
 
+		if (ArticleContent.newDataFetched) {
+			// Toast.makeText(this, "lol",
+			// Toast.LENGTH_SHORT).show();
+			Log.e("CLICK", "Clicking");
+			// ArticleListAdapter adapter = (ArticleListAdapter)
+			// ((ArticleListFragment) getSupportFragmentManager()
+			// .findFragmentById(R.id.article_list)).getListAdapter();
+			// adapter.clear();
+			// adapter.addAll(ArticleContent.ITEMS);
+			// adapter.notifyDataSetChanged();
+			ArticleContent.newDataFetched = false;
+		}
+
+		return rowView;
 	}
 }

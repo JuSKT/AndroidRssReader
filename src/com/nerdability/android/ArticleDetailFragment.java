@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nerdability.android.adapter.ArticleListAdapter;
+import com.nerdability.android.container.ArticleContent;
 import com.nerdability.android.db.DbAdapter;
 import com.nerdability.android.model.Article;
 import com.nerdability.android.util.DateUtils;
@@ -96,7 +97,7 @@ public class ArticleDetailFragment extends Fragment {
 			db.markAsUnread(displayedArticle.getGuid());
 			db.close();
 			displayedArticle.setRead(false);
-			// ArticleContent.modify(displayedArticle);
+			ArticleContent.modify(displayedArticle);
 
 			// ArticleListAdapter adapter = (ArticleListAdapter)
 			// ((ArticleListFragment)

@@ -47,8 +47,6 @@ public class RssRefreshTask extends AsyncTask<String, Void, List<Article>> {
 		articleListFrag.getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				// ArticleContent.ITEMS.clear();
-				// ArticleContent.ITEMS_MAP.clear();
 				for (Article a : articles) {
 					Log.d("DB", "Searching DB for GUID: " + a.getGuid());
 					DbAdapter dba = new DbAdapter(articleListFrag.getActivity());

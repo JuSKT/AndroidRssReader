@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
 
-public class Article implements Serializable {
+public class Article implements Serializable, Comparable<Article>,
+		Comparator<Article> {
 
 	public static final String KEY = "ARTICLE";
 
@@ -143,6 +145,31 @@ public class Article implements Serializable {
 			e.printStackTrace();
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Compare articles with the ID of the database
+	 */
+	@Override
+	public int compareTo(Article a) {
+		if (a.dbId > this.dbId) {
+			return -1;
+		} else if (a.dbId == this.dbId) {
+			return 0;
+		} else {
+			return 1;
+		}
+	}
+
+	@Override
+	public int compare(Article lhs, Article rhs) {
+		if (lhs.getDbId() > rhs.getDbId()) {
+			return -1;
+		} else if (lhs.getDbId() == rhs.getDbId()) {
+			return 0;
+		} else {
+			return 1;
+		}
 	}
 
 }

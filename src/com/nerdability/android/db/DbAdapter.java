@@ -146,7 +146,7 @@ public class DbAdapter {
 		Cursor cursor = sqLiteDatabase.query(DATABASE_TABLE, new String[] {
 				KEY_ROWID, KEY_GUID, KEY_READ, KEY_OFFLINE, KEY_TITLE,
 				KEY_DESCRIPTION, KEY_PUBDATE, KEY_AUTHOR, KEY_URL,
-				KEY_ENCODED_CONTENT }, null, null, null, null, null);
+				KEY_ENCODED_CONTENT }, null, null, null, null, KEY_ROWID);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
