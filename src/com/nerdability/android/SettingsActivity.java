@@ -1,8 +1,14 @@
 package com.nerdability.android;
 
+import java.util.Calendar;
 import java.util.List;
 
+import com.nerdability.android.preferences.AppPreferences;
+import com.nerdability.android.rss.service.RssRefreshService;
+
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -89,6 +95,35 @@ public class SettingsActivity extends PreferenceActivity {
 		bindPreferenceSummaryToValue(findPreference("rss_feed_url_text"));
 		bindPreferenceSummaryToValue(findPreference("notifications_new_rss_feed_ringtone"));
 
+		ListPreference listPref = (ListPreference) getPreferenceManager()
+				.findPreference("sync_frequency");
+		listPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				return reloadRssRefreshService();
+			}
+		});
+	}
+
+	public boolean reloadRssRefreshService() {
+		if (AppPreferences.getSync_frequency(SettingsActivity.this
+				.getApplicationContext()) != -1) {
+			long REPEAT_TIME = 1000 * 60 * AppPreferences
+					.getSync_frequency(SettingsActivity.this);
+
+			Intent intent = new Intent(SettingsActivity.this,
+					RssRefreshService.class);
+			PendingIntent pintent = PendingIntent.getService(
+					SettingsActivity.this, 0, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			AlarmManager alarm = (AlarmManager) SettingsActivity.this
+					.getSystemService(Context.ALARM_SERVICE);
+			alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, Calendar
+					.getInstance().getTimeInMillis(), REPEAT_TIME, pintent);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/** {@inheritDoc} */

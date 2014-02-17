@@ -27,11 +27,6 @@ public class ArticleListActivity extends FragmentActivity implements
 	private boolean mTwoPane;
 	private DbAdapter dba;
 
-	private Intent intent;
-	private PendingIntent pintent;
-	private AlarmManager alarm;
-	private Calendar cal = Calendar.getInstance();
-
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 
 		@Override
@@ -50,10 +45,8 @@ public class ArticleListActivity extends FragmentActivity implements
 						dba.openToRead();
 						ArticleContent.addItems(dba.getAllArticles());
 						dba.close();
-						adapter.addAll(ArticleContent.cloneList());
-					} else {
-						adapter.addAll(ArticleContent.cloneList());
-					}
+					} 
+					adapter.addAll(ArticleContent.cloneList());
 					adapter.notifyDataSetChanged();
 				} else {
 					Toast.makeText(getApplicationContext(),
@@ -78,13 +71,8 @@ public class ArticleListActivity extends FragmentActivity implements
 					.findFragmentById(R.id.article_list))
 					.setActivateOnItemClick(true);
 		}
-
-		dba = new DbAdapter(getApplicationContext());
 		
-		PreferenceManager.setDefaultValues(this, R.xml.pref_data_sync, false);
-		PreferenceManager.setDefaultValues(this, R.xml.pref_notification, false);
-
-		loadServiceSchedule();
+		dba = new DbAdapter(this);
 	}
 
 	@Override
@@ -143,19 +131,4 @@ public class ArticleListActivity extends FragmentActivity implements
 			startActivity(detailIntent);
 		}
 	}
-
-	private void loadServiceSchedule() {
-		if (AppPreferences.getSync_frequency(getApplicationContext()) != -1) {
-			long REPEAT_TIME = 1000 * 60 * AppPreferences
-					.getSync_frequency(getApplicationContext());
-
-			intent = new Intent(this, RssRefreshService.class);
-			pintent = PendingIntent.getService(this, 0, intent,
-					PendingIntent.FLAG_CANCEL_CURRENT);
-			alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-			alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-					cal.getTimeInMillis(), REPEAT_TIME, pintent);
-		}
-	}
-
 }
