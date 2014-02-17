@@ -121,6 +121,13 @@ public class Article implements Serializable, Comparable<Article>,
 		this.dbId = dbId;
 	}
 
+	/**
+	 * Delete the CDATA tag of the string
+	 * 
+	 * @param data
+	 *            the string to work with
+	 * @return the string with the CDATA tag deleted
+	 */
 	private String extractCData(String data) {
 		if (data != null) {
 			data = data.replaceAll("<!\\[CDATA\\[", "");
@@ -129,6 +136,27 @@ public class Article implements Serializable, Comparable<Article>,
 		return data;
 	}
 
+	/**
+	 * Generate the specific Guid for articles
+	 * 
+	 * @param str
+	 *            the title of the news (in our case)
+	 * @return the custom generated Guid
+	 */
+	public static String generateGuid(String str) {
+		String strmd5 = md5(str);
+		strmd5.concat(String.valueOf(generateRandomIntNumberByRange(1000000,
+				9999999)));
+		return strmd5;
+	}
+
+	/**
+	 * Generate a md5 of the string
+	 * 
+	 * @param str
+	 *            the string
+	 * @return the generated md5 value of the string
+	 */
 	public static String md5(String str) {
 		MessageDigest md = null;
 		StringBuffer sb = new StringBuffer();
@@ -148,6 +176,19 @@ public class Article implements Serializable, Comparable<Article>,
 	}
 
 	/**
+	 * Generate a random number between a minimum and a maximum
+	 * 
+	 * @param Min
+	 *            the minimum value
+	 * @param Max
+	 *            the maximum value
+	 * @return the random number
+	 */
+	public static int generateRandomIntNumberByRange(int Min, int Max) {
+		return Min + (int) (Math.random() * ((Max - Min) + 1));
+	}
+
+	/**
 	 * Compare articles with the ID of the database
 	 */
 	@Override
@@ -161,6 +202,9 @@ public class Article implements Serializable, Comparable<Article>,
 		}
 	}
 
+	/**
+	 * Compare articles with the ID of the database
+	 */
 	@Override
 	public int compare(Article lhs, Article rhs) {
 		if (lhs.getDbId() > rhs.getDbId()) {

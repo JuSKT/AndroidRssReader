@@ -46,36 +46,45 @@ public class DbAdapter {
 	private SQLiteDatabase sqLiteDatabase;
 	private Context context;
 
+	// openToWrite();
+	//
+	// try {
+	// insertBlogListingWithData("001", "Title1", "Description1",
+	// "Tue, 11 Feb 2014 09:00:00 GMT", "Author1", new URL(
+	// "http://www.url.eu"), "Encoded content1");
+	// insertBlogListingWithData("002", "Title2", "Description2",
+	// "Tue, 11 Feb 2014 09:00:00 GMT", "Author2", new URL(
+	// "http://www.url.eu"), "Encoded content2");
+	// insertBlogListingWithData("003", "Title3", "Description3",
+	// "Tue, 11 Feb 2014 09:00:00 GMT", "Author3", new URL(
+	// "http://www.url.eu"), "Encoded content3");
+	// insertBlogListingWithData("004", "Title4", "Description4",
+	// "Tue, 11 Feb 2014 09:00:00 GMT", "Author4", new URL(
+	// "http://www.url.eu"), "Encoded content4");
+	// insertBlogListingWithData("005", "Title5", "Description5",
+	// "Tue, 11 Feb 2014 09:00:00 GMT", "Author5", new URL(
+	// "http://www.url.eu"), "Encoded content5");
+	// insertBlogListingWithData("006", "Title6", "Description6",
+	// "Tue, 11 Feb 2014 09:00:00 GMT", "Author6", new URL(
+	// "http://www.url.eu"), "Encoded content6");
+	// insertBlogListingWithData("007", "Title7", "Description7",
+	// "Tue, 11 Feb 2014 09:00:00 GMT", "Author7", new URL(
+	// "http://www.url.eu"), "Encoded content7");
+	// insertBlogListingWithData("008", "Title8", "Description8",
+	// "Tue, 11 Feb 2014 09:00:00 GMT", "Author8", new URL(
+	// "http://www.url.eu"), "Encoded content8");
+	// insertBlogListingWithData("009", "Title9", "Description9",
+	// "Tue, 11 Feb 2014 09:00:00 GMT", "Author9", new URL(
+	// "http://www.url.eu"), "Encoded content9");
+	// } catch (MalformedURLException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// close();
+
 	public DbAdapter(Context c) {
 		context = c;
-
-		// openToWrite();
-		//
-		// try {
-		// insertBlogListingWithData("001", "Title1", "Description1", new
-		// Date(), "Author1", new URL("http://www.url.eu"), "Encoded content1");
-		// insertBlogListingWithData("002", "Title2", "Description2", new
-		// Date(), "Author2", new URL("http://www.url.eu"), "Encoded content2");
-		// insertBlogListingWithData("003", "Title3", "Description3", new
-		// Date(), "Author3", new URL("http://www.url.eu"), "Encoded content3");
-		// insertBlogListingWithData("004", "Title4", "Description4", new
-		// Date(), "Author4", new URL("http://www.url.eu"), "Encoded content4");
-		// insertBlogListingWithData("005", "Title5", "Description5", new
-		// Date(), "Author5", new URL("http://www.url.eu"), "Encoded content5");
-		// insertBlogListingWithData("006", "Title6", "Description6", new
-		// Date(), "Author6", new URL("http://www.url.eu"), "Encoded content6");
-		// insertBlogListingWithData("007", "Title7", "Description7", new
-		// Date(), "Author7", new URL("http://www.url.eu"), "Encoded content7");
-		// insertBlogListingWithData("008", "Title8", "Description8", new
-		// Date(), "Author8", new URL("http://www.url.eu"), "Encoded content8");
-		// insertBlogListingWithData("009", "Title9", "Description9", new
-		// Date(), "Author9", new URL("http://www.url.eu"), "Encoded content9");
-		// } catch (MalformedURLException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		//
-		// close();
 	}
 
 	public DbAdapter openToRead() throws android.database.SQLException {

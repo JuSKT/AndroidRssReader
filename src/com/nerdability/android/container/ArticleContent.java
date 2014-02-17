@@ -36,19 +36,23 @@ public class ArticleContent {
 	public static void addItem(Article article) {
 		ITEMS.add(article);
 		ITEMS_MAP.put(article.getGuid(), article);
+		
+	}
+	
+	public static void addItems(List<Article> articles) {
+		for (Article article : articles) {
+			ITEMS.add(article);
+			ITEMS_MAP.put(article.getGuid(), article);
+		}
+		//Sort
+		sortListAndMap();
 	}
 
 	public static void modify(Article article) {
 		// Make the change in the map
-		ITEMS_MAP.remove(article.getGuid());
 		ITEMS_MAP.put(article.getGuid(), article);
-		// Sort the map
-		ITEMS_MAP = sortByValues(ITEMS_MAP);
-		// Make the change in the list
-		ITEMS.clear();
-		ITEMS.addAll(ITEMS_MAP.values());
-		// Don't need to sort the list because we sorted the map
-		// Collections.sort(ITEMS);
+		// Sort 
+		sortListAndMap();
 	}
 
 	public static void delete(Article article) {
@@ -56,11 +60,24 @@ public class ArticleContent {
 		ITEMS_MAP.remove(article.getGuid());
 		ITEMS.remove(article);
 	}
+	
+	private static void sortListAndMap(){
+		ITEMS_MAP = sortByValues(ITEMS_MAP);
+		// Make the change in the list
+		ITEMS.clear();
+		ITEMS.addAll(ITEMS_MAP.values());
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Article> cloneList() {
+		return (ArrayList<Article>) ((ArrayList<Article>) ITEMS).clone();
+	}
 
 	/*
 	 * Paramterized method to sort Map e.g. HashMap or Hashtable in Java throw
 	 * NullPointerException if Map contains null key
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <K extends Comparable, V extends Comparable> Map<K, V> sortByKeys(
 			Map<K, V> map) {
 		List<K> keys = new LinkedList<K>(map.keySet());
@@ -81,6 +98,7 @@ public class ArticleContent {
 	 * NullPointerException if Map contains null values It also sort values even
 	 * if they are duplicates
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <K extends Comparable, V extends Comparable> Map<K, V> sortByValues(
 			Map<K, V> map) {
 		List<Map.Entry<K, V>> entries = new LinkedList<Map.Entry<K, V>>(

@@ -5,48 +5,49 @@ import android.preference.PreferenceManager;
 
 public class AppPreferences {
 
-	public static void setNimp(Context context, String nimp) {
+	public static void setRss_feed_url_text(Context context,
+			String rss_feed_url_text) {
 		PreferenceManager.getDefaultSharedPreferences(context).edit()
-				.putString("nimp", nimp).commit();
+				.putString("rss_feed_url_text", rss_feed_url_text).commit();
 	}
 
-	public static String getNimp(Context context) {
+	public static String getRss_feed_url_text(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
-				.getString("nimp", "");
+				.getString("rss_feed_url_text", "");
 	}
 
-	public static int getStarredClass(Context context) {
+	public static void setSync_frequency(Context context, String sync_frequency) {
+		PreferenceManager.getDefaultSharedPreferences(context).edit()
+				.putString("sync_frequency", sync_frequency).commit();
+	}
+
+	public static int getSync_frequency(Context context) {
 		return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(
-				context).getString("starredclass", ""));
+				context).getString("sync_frequency", "360"));
 	}
 
-	public static void setStarredClass(Context context, int id) {
-		PreferenceManager.getDefaultSharedPreferences(context).edit()
-				.putString("starredclass", String.valueOf(id)).commit();
+	public static void setNotifications_new_rss_feed(Context context,
+			boolean notifications_new_rss_feed) {
+		PreferenceManager
+				.getDefaultSharedPreferences(context)
+				.edit()
+				.putBoolean("notifications_new_rss_feed",
+						notifications_new_rss_feed).commit();
 	}
 
-	public static String getUserEmail(Context context) {
+	public static boolean getNotifications_new_rss_feed(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
-				.getString("email", "");
+				.getBoolean("notifications_new_rss_feed", false);
 	}
 
-	public static boolean getMarkNumericDisplay(Context context) {
+	public static String getNotifications_new_rss_feed_ringtone(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
-				.getBoolean("markdisplay", false);
+				.getString("notifications_new_rss_feed_ringtone", "");
 	}
 
-	public static String getMarkMaxNumeric(Context context) {
+	public static boolean getNotifications_new_rss_feed_vibrate(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
-				.getString("maxmark", "");
+				.getBoolean("notifications_new_rss_feed_vibrate", false);
 	}
 
-	public static String getRingtone(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context)
-				.getString("ringtone", "");
-	}
-
-	public static boolean getSongActivated(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context)
-				.getBoolean("songs", false);
-	}
 }

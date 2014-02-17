@@ -12,12 +12,14 @@ import android.widget.ListView;
 
 import com.nerdability.android.adapter.ArticleListAdapter;
 import com.nerdability.android.container.ArticleContent;
+import com.nerdability.android.db.DbAdapter;
+import com.nerdability.android.model.Article;
+import com.nerdability.android.preferences.AppPreferences;
 import com.nerdability.android.rss.task.RssRefreshTask;
 
 public class ArticleListFragment extends ListFragment {
 
 	private static final String STATE_ACTIVATED_POSITION = "activated_position";
-	private static final String BLOG_URL = "http://www.ombudsman.europa.eu/rss/rss.xml";
 	private Callbacks mCallbacks = sDummyCallbacks;
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 	private RssRefreshTask rssRefreshTask;
@@ -41,12 +43,17 @@ public class ArticleListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		if (ArticleContent.ITEMS.isEmpty()) {
+			DbAdapter dba = new DbAdapter(getActivity());
+			dba.openToRead();
+			ArticleContent.addItems(dba.getAllArticles());
+			dba.close();
+		}
+
 		ArticleListAdapter adapter = new ArticleListAdapter(getActivity(),
-				ArticleContent.ITEMS);
+				ArticleContent.cloneList());
 		this.setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
-
-		// refreshList();
 	}
 
 	@Override
@@ -128,6 +135,7 @@ public class ArticleListFragment extends ListFragment {
 
 	private void refreshList() {
 		rssRefreshTask = new RssRefreshTask(this);
-		rssRefreshTask.execute(BLOG_URL);
+		rssRefreshTask.execute(AppPreferences.getRss_feed_url_text(this
+				.getActivity()));
 	}
 }

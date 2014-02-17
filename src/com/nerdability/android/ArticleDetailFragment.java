@@ -39,6 +39,7 @@ public class ArticleDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		db = new DbAdapter(getActivity());
+
 		if (getArguments().containsKey(Article.KEY)) {
 			displayedArticle = (Article) getArguments().getSerializable(
 					Article.KEY);
@@ -87,36 +88,31 @@ public class ArticleDetailFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		Log.d("item ID : ", "onOptionsItemSelected Item ID" + id);
-		if (id == R.id.actionbar_saveoffline) {
-			Toast.makeText(getActivity().getApplicationContext(),
-					"This article has been saved of offline reading.",
-					Toast.LENGTH_LONG).show();
-			return true;
-		} else if (id == R.id.actionbar_markunread) {
+//		if (id == R.id.actionbar_saveoffline) {
+//			Toast.makeText(getActivity().getApplicationContext(),
+//					"This article has been saved of offline reading.",
+//					Toast.LENGTH_LONG).show();
+//			return true;
+//		} else 
+		if (id == R.id.actionbar_markunread) {
 			db.openToWrite();
 			db.markAsUnread(displayedArticle.getGuid());
 			db.close();
 			displayedArticle.setRead(false);
 			ArticleContent.modify(displayedArticle);
 
-			// ArticleListAdapter adapter = (ArticleListAdapter)
-			// ((ArticleListFragment)
-			// getActivity().getSupportFragmentManager().findFragmentById(R.id.article_list)).getListAdapter();
-
-			ArticleListFragment frag = ((ArticleListFragment) getActivity()
-					.getSupportFragmentManager().findFragmentById(
-							R.id.article_list));
-			// ArticleListFragment frag = ((ArticleListFragment)
-			// ((ArticleListFragment)
-			// getFragmentManager().findFragmentById(R.id.article_list)));
-			if (frag != null) {
-				ArticleListAdapter adapter = (ArticleListAdapter) frag
-						.getListAdapter();
+			try {
+				ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getActivity()
+						.getSupportFragmentManager().findFragmentById(
+								R.id.article_list)).getListAdapter();
 				adapter.notifyDataSetChanged();
-			} else {
-				Log.d("REFRESH : ", "NO REFRESH DATA LIST");
+			} catch (NullPointerException e) {
+				e.printStackTrace();
 			}
 
+			Toast.makeText(getActivity().getApplicationContext(),
+					"This article has been set unread.", Toast.LENGTH_LONG)
+					.show();
 			return true;
 		} else {
 			return super.onOptionsItemSelected(item);

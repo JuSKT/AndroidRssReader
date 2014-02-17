@@ -12,24 +12,36 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Vibrator;
 import android.util.Log;
 
+import com.nerdability.android.ArticleListActivity;
+import com.nerdability.android.R;
 import com.nerdability.android.container.ArticleContent;
 import com.nerdability.android.db.DbAdapter;
 import com.nerdability.android.model.Article;
+import com.nerdability.android.preferences.AppPreferences;
 import com.nerdability.android.rss.parser.RssHandler;
 
+@SuppressLint("NewApi")
 public class RssRefreshService extends IntentService {
 
 	private int result = Activity.RESULT_CANCELED;
 	public static final String RESULT = "result";
 	public static final String NOTIFICATION = "com.nerdability.android.receiver";
-
-	private static final String BLOG_URL = "http://www.ombudsman.europa.eu/rss/rss.xml";
+	private boolean newData = false;
 
 	public RssRefreshService() {
 		super("RssRefreshService");
@@ -58,12 +70,20 @@ public class RssRefreshService extends IntentService {
 								a.getTitle(), a.getDescription(),
 								a.getPubDate(), a.getAuthor(), a.getUrl(),
 								a.getEncodedContent());
+						a = dba.getBlogListing(a.getGuid());
 						dba.close();
 						ArticleContent.addItem(a);
+						newData = true;
 					}
 				}
-				result = Activity.RESULT_OK;
-				publishResults(result);
+				if (newData) {
+					result = Activity.RESULT_OK;
+					publishResults(result);
+					newData = false;
+					createNotifications();
+				} else {
+					result = Activity.RESULT_CANCELED;
+				}
 			}
 
 			@Override
@@ -96,11 +116,54 @@ public class RssRefreshService extends IntentService {
 
 				return rh.getArticleList();
 			}
-		}.execute(BLOG_URL);
+		}.execute(AppPreferences.getRss_feed_url_text(getApplicationContext()));
+	}
 
-		// if (newData) {
-		// publishResults(result);
-		// }
+	private void createNotifications() {
+		// Notification by sound
+		if (AppPreferences
+				.getNotifications_new_rss_feed(getApplicationContext())) {
+			Ringtone ring = RingtoneManager
+					.getRingtone(
+							getApplicationContext(),
+							Uri.parse(AppPreferences
+									.getNotifications_new_rss_feed_ringtone(getApplicationContext())));
+			ring.play();
+		}
+
+		// Notification by vibration
+		if (AppPreferences
+				.getNotifications_new_rss_feed(getApplicationContext())
+				&& AppPreferences
+						.getNotifications_new_rss_feed_vibrate(getApplicationContext())) {
+			Vibrator vibrator = (Vibrator) getApplicationContext()
+					.getSystemService(Context.VIBRATOR_SERVICE);
+			vibrator.vibrate(1000);
+		}
+
+		// Notification by a notification
+		if (AppPreferences
+				.getNotifications_new_rss_feed(getApplicationContext())) {
+
+			Intent i = new Intent(getApplicationContext(),
+					ArticleListActivity.class);
+			PendingIntent pIntent = PendingIntent.getActivity(
+					getApplicationContext(), 0, i, 0);
+
+			// Build notification
+			Notification noti = new Notification.Builder(
+					getApplicationContext()).setContentTitle("New feed")
+					.setContentText("Check the new feed")
+					.setSmallIcon(R.drawable.rssicon).setContentIntent(pIntent)
+					// .addAction(R.drawable.rssicon, "Call", pIntent)
+					// .addAction(R.drawable.rssicon, "More", pIntent)
+					// .addAction(R.drawable.rssicon, "And more", pIntent)
+					.build();
+			NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			// hide the notification after its selected
+			noti.flags |= Notification.FLAG_AUTO_CANCEL;
+			notificationManager.notify(0, noti);
+		}
 	}
 
 	private void publishResults(int result) {

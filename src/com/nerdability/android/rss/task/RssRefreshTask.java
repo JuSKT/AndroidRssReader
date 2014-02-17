@@ -47,6 +47,8 @@ public class RssRefreshTask extends AsyncTask<String, Void, List<Article>> {
 		articleListFrag.getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				ArticleContent.ITEMS.clear();
+				ArticleContent.ITEMS_MAP.clear();
 				for (Article a : articles) {
 					Log.d("DB", "Searching DB for GUID: " + a.getGuid());
 					DbAdapter dba = new DbAdapter(articleListFrag.getActivity());
@@ -69,18 +71,20 @@ public class RssRefreshTask extends AsyncTask<String, Void, List<Article>> {
 						a.setOffline(fetchedArticle.isOffline());
 						a.setRead(fetchedArticle.isRead());
 					}
-					ArticleContent.addItem(a);
+//					ArticleContent.addItem(a);
 				}
+				ArticleContent.addItems(articles);
 
 				if (articles == null || articles.isEmpty()) {
 					DbAdapter dba = new DbAdapter(articleListFrag.getActivity());
 					dba.openToRead();
-					articles.addAll(dba.getAllArticles());
+					ArticleContent.addItems(dba.getAllArticles());
 					dba.close();
 				}
 
 				ArticleListAdapter adapter = new ArticleListAdapter(
-						articleListFrag.getActivity(), articles);
+						articleListFrag.getActivity(), ArticleContent
+								.cloneList());
 				articleListFrag.setListAdapter(adapter);
 				adapter.notifyDataSetChanged();
 			}
