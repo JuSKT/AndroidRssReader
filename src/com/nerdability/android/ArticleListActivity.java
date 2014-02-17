@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -33,35 +34,13 @@ public class ArticleListActivity extends FragmentActivity implements
 
 	private RssAutoRefreshService s;
 
-	// private Intent intent;
-	// private PendingIntent pintent;
+	private Intent intent;
+	private PendingIntent pintent;
+	private AlarmManager alarm;
+	private long REPEAT_TIME = 1000 * 30;
+	private Calendar cal = Calendar.getInstance();
 
-	private BroadcastReceiver receiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Bundle bundle = intent.getExtras();
-			if (bundle != null) {
-				int resultCode = bundle.getInt(RssRefreshService.RESULT);
-				if (resultCode == Activity.RESULT_OK) {
-					Toast.makeText(getApplicationContext(),
-							"New data fetched, updating the list...",
-							Toast.LENGTH_LONG).show();
-					Log.d("RECEIVER", "Service worked great");
-					ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getSupportFragmentManager()
-							.findFragmentById(R.id.article_list))
-							.getListAdapter();
-					adapter.clear();
-					adapter.addAll(ArticleContent.ITEMS);
-					adapter.notifyDataSetChanged();
-				} else {
-					Toast.makeText(getApplicationContext(),
-							"No new data found", Toast.LENGTH_LONG).show();
-					Log.d("RECEIVER", "Service not worked");
-				}
-			}
-		}
-	};
+	private BroadcastReceiver receiver;
 
 	public ArticleListActivity() {
 	}
@@ -69,10 +48,48 @@ public class ArticleListActivity extends FragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_article_list);
+
 		dba = new DbAdapter(this);
 
-		// loadServiceSchedule2();
+		dba.openToRead();
+		for (Article article : dba.getAllArticles()) {
+			ArticleContent.addItem(article);
+		}
+		dba.close();
+
+		setContentView(R.layout.activity_article_list);
+
+		receiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Bundle bundle = intent.getExtras();
+				if (bundle != null) {
+					int resultCode = bundle.getInt(RssRefreshService.RESULT);
+					if (resultCode == Activity.RESULT_OK) {
+						Toast.makeText(getApplicationContext(),
+								"New data fetched, updating the list...",
+								Toast.LENGTH_LONG).show();
+						Log.d("RECEIVER", "Service worked great");
+
+						ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getSupportFragmentManager()
+								.findFragmentById(R.id.article_list))
+								.getListAdapter();
+						adapter.clear();
+						dba.openToRead();
+						adapter.addAll(ArticleContent.ITEMS);
+						dba.close();
+						adapter.notifyDataSetChanged();
+					} else {
+						Toast.makeText(getApplicationContext(),
+								"No new data found", Toast.LENGTH_LONG).show();
+						Log.d("RECEIVER", "Service not worked");
+					}
+				}
+			}
+		};
+
+		loadServiceSchedule2();
 
 		if (findViewById(R.id.article_detail_container) != null) {
 			mTwoPane = true;
@@ -85,8 +102,9 @@ public class ArticleListActivity extends FragmentActivity implements
 	@Override
 	protected void onPause() {
 		super.onPause();
-		// unregisterReceiver(receiver);
+		unregisterReceiver(receiver);
 		// stopService(intent);
+		alarm.cancel(pintent);
 
 		// unbindService(mConnection);
 	}
@@ -94,9 +112,11 @@ public class ArticleListActivity extends FragmentActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// registerReceiver(receiver, new IntentFilter(
-		// RssRefreshService.NOTIFICATION));
+		registerReceiver(receiver, new IntentFilter(
+				RssRefreshService.NOTIFICATION));
 		// startService(intent);
+		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+				cal.getTimeInMillis(), REPEAT_TIME, pintent);
 
 		// Intent intent = new Intent(this, RssAutoRefreshService.class);
 		// bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -188,17 +208,13 @@ public class ArticleListActivity extends FragmentActivity implements
 	}
 
 	private void loadServiceSchedule2() {
-		long REPEAT_TIME = 1000 * 30;
-		Calendar cal = Calendar.getInstance();
-
-		// intent = new Intent(this, RssRefreshService.class);
-		// pintent = PendingIntent.getService(this, 0, intent,
-		// PendingIntent.FLAG_CANCEL_CURRENT);
-
-		AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		intent = new Intent(this, RssRefreshService.class);
+		pintent = PendingIntent.getService(this, 0, intent,
+				PendingIntent.FLAG_CANCEL_CURRENT);
+		alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		// Start every 30 seconds
-		// alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-		// cal.getTimeInMillis(), REPEAT_TIME, pintent);
+		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+				cal.getTimeInMillis(), REPEAT_TIME, pintent);
 	}
 
 }

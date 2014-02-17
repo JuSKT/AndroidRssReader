@@ -12,8 +12,6 @@ import android.widget.ListView;
 
 import com.nerdability.android.adapter.ArticleListAdapter;
 import com.nerdability.android.container.ArticleContent;
-import com.nerdability.android.db.DbAdapter;
-import com.nerdability.android.model.Article;
 import com.nerdability.android.rss.task.RssRefreshTask;
 
 public class ArticleListFragment extends ListFragment {
@@ -42,13 +40,6 @@ public class ArticleListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		DbAdapter dba = new DbAdapter(getActivity());
-		dba.openToRead();
-		for (Article article : dba.getAllArticles()) {
-			ArticleContent.addItem(article);
-		}
-		dba.close();
 
 		ArticleListAdapter adapter = new ArticleListAdapter(getActivity(),
 				ArticleContent.ITEMS);
