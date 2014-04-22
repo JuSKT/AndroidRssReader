@@ -47,8 +47,6 @@ public class RssRefreshTask extends AsyncTask<String, Void, List<Article>> {
 		articleListFrag.getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				ArticleContent.ITEMS.clear();
-				ArticleContent.ITEMS_MAP.clear();
 				for (Article a : articles) {
 					Log.d("DB", "Searching DB for GUID: " + a.getGuid());
 					DbAdapter dba = new DbAdapter(articleListFrag.getActivity());
@@ -56,23 +54,24 @@ public class RssRefreshTask extends AsyncTask<String, Void, List<Article>> {
 					Article fetchedArticle = dba.getBlogListing(a.getGuid());
 					dba.close();
 					if (fetchedArticle == null) {
-						Log.d("DB",
-								"Found entry for first time: " + a.getTitle());
+						Log.d("DB",	"Found entry for first time: " + a.getTitle());
 						dba = new DbAdapter(articleListFrag.getActivity());
 						dba.openToWrite();
 						// dba.insertBlogListing(a.getGuid());
-						dba.insertBlogListingWithData(a.getGuid(),
+						long dbId = dba.insertBlogListingWithData(a.getGuid(),
 								a.getTitle(), a.getDescription(),
 								a.getPubDate(), a.getAuthor(), a.getUrl(),
 								a.getEncodedContent());
 						dba.close();
+						a.setDbId(dbId);
 					} else {
 						a.setDbId(fetchedArticle.getDbId());
 						a.setOffline(fetchedArticle.isOffline());
 						a.setRead(fetchedArticle.isRead());
 					}
-//					ArticleContent.addItem(a);
+					// ArticleContent.addItem(a);
 				}
+				
 				ArticleContent.addItems(articles);
 
 				if (articles == null || articles.isEmpty()) {

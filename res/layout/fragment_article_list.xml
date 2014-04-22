@@ -8,10 +8,15 @@
 	android:background="#E6E6E6"
     style="?android:attr/textAppearanceLarge"
 	tools:context=".ArticleListFragment">
+	
+<!--     <ImageView -->
+<!-- 	    android:id="@+id/image_list" -->
+<!-- 	    android:layout_width="50dip" -->
+<!--         android:layout_height="50dip" -->
+<!-- 	    android:src="@drawable/ombudsman_logo" /> -->
 
 	<TextView 
 	    android:id="@+id/article_title_text" 
-	    xmlns:tools="http://schemas.android.com/tools"
     	style="?android:attr/textAppearanceLarge"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" 
@@ -21,6 +26,7 @@
 		android:paddingRight="8dip"
 		android:textSize="16sp" />
 	
+	<!-- xmlns:tools="http://schemas.android.com/tools" -->
 
 	<TextView 
 	    style="?android:attr/textAppearanceLarge"

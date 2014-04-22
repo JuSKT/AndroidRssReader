@@ -3,7 +3,6 @@ package com.nerdability.android.container;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,63 +17,54 @@ import com.nerdability.android.model.Article;
 public class ArticleContent {
 
 	/**
-	 * An array of sample (Article) items.
-	 */
-	public static List<Article> ITEMS = new ArrayList<Article>();
-
-	/**
 	 * A map of sample (Article) items, by ID.
 	 */
-	public static Map<String, Article> ITEMS_MAP = new HashMap<String, Article>();
+	public static Map<String, Article> ITEMS_MAP = new LinkedHashMap<String, Article>();
 
 	public static boolean newDataFetched = false;
 
 	static {
-
 	}
 
 	public static void addItem(Article article) {
-		ITEMS.add(article);
 		ITEMS_MAP.put(article.getGuid(), article);
-		
+		// Sort
+		sortMap();
 	}
-	
+
 	public static void addItems(List<Article> articles) {
 		for (Article article : articles) {
-			ITEMS.add(article);
 			ITEMS_MAP.put(article.getGuid(), article);
 		}
-		//Sort
-		sortListAndMap();
+		// Sort
+		sortMap();
 	}
 
 	public static void modify(Article article) {
 		// Make the change in the map
 		ITEMS_MAP.put(article.getGuid(), article);
-		// Sort 
-		sortListAndMap();
+		// Sort
+		sortMap();
 	}
 
 	public static void delete(Article article) {
 		// Make the change in the map
 		ITEMS_MAP.remove(article.getGuid());
-		ITEMS.remove(article);
-	}
-	
-	private static void sortListAndMap(){
-		ITEMS_MAP = sortByValues(ITEMS_MAP);
-		// Make the change in the list
-		ITEMS.clear();
-		ITEMS.addAll(ITEMS_MAP.values());
 	}
 
-	@SuppressWarnings("unchecked")
+	private static void sortMap() {
+		ITEMS_MAP = sortByValues(ITEMS_MAP);
+	}
+
 	public static ArrayList<Article> cloneList() {
-		return (ArrayList<Article>) ((ArrayList<Article>) ITEMS).clone();
+		ArrayList<Article> list = new ArrayList<Article>();
+		list.addAll(ITEMS_MAP.values());
+		Collections.sort(list, new Article());
+		return list;
 	}
 
 	/*
-	 * Paramterized method to sort Map e.g. HashMap or Hashtable in Java throw
+	 * Parameterized method to sort Map e.g. HashMap or Hashtable in Java throw
 	 * NullPointerException if Map contains null key
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })

@@ -3,9 +3,6 @@ package com.nerdability.android;
 import java.util.Calendar;
 import java.util.List;
 
-import com.nerdability.android.preferences.AppPreferences;
-import com.nerdability.android.rss.service.RssRefreshService;
-
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -27,6 +24,9 @@ import android.preference.RingtonePreference;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.view.MenuItem;
+
+import com.nerdability.android.preferences.AppPreferences;
+import com.nerdability.android.rss.service.RssRefreshService;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -95,11 +95,23 @@ public class SettingsActivity extends PreferenceActivity {
 		bindPreferenceSummaryToValue(findPreference("rss_feed_url_text"));
 		bindPreferenceSummaryToValue(findPreference("notifications_new_rss_feed_ringtone"));
 
+		// Listener to
 		ListPreference listPref = (ListPreference) getPreferenceManager()
 				.findPreference("sync_frequency");
 		listPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
+
+				String stringValue = newValue.toString();
+				// For list preferences, look up the correct display value in
+				// the preference's 'entries' list.
+				ListPreference listPreference = (ListPreference) preference;
+				int index = listPreference.findIndexOfValue(stringValue);
+
+				// Set the summary to reflect the new value.
+				preference.setSummary(index >= 0 ? listPreference.getEntries()[index]
+						: null);
+
 				return reloadRssRefreshService();
 			}
 		});

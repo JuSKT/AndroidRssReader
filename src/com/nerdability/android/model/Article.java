@@ -4,7 +4,13 @@ import java.io.Serializable;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
+
+import android.util.Log;
 
 public class Article implements Serializable, Comparable<Article>,
 		Comparator<Article> {
@@ -145,7 +151,7 @@ public class Article implements Serializable, Comparable<Article>,
 	 */
 	public static String generateGuid(String str) {
 		String strmd5 = md5(str);
-		strmd5.concat(String.valueOf(generateRandomIntNumberByRange(1000000,
+		strmd5 = strmd5.concat(String.valueOf(generateRandomIntNumberByRange(1000000,
 				9999999)));
 		return strmd5;
 	}
@@ -193,13 +199,33 @@ public class Article implements Serializable, Comparable<Article>,
 	 */
 	@Override
 	public int compareTo(Article a) {
-		if (a.dbId > this.dbId) {
+		
+		SimpleDateFormat df = new SimpleDateFormat(
+				"EEE, dd MMM yyyy kk:mm:ss Z", Locale.ENGLISH);
+		Date pDate1 = new Date();
+		Date pDate2 = new Date();
+		try {
+			pDate1 = df.parse(this.getPubDate());
+			pDate2 = df.parse(a.getPubDate());
+		} catch (ParseException e) {
+			Log.e("DATE PARSING", "Error parsing date..");
+		}
+		
+		if (pDate2.before(pDate1)) {
 			return -1;
-		} else if (a.dbId == this.dbId) {
+		} else if (pDate2.equals(pDate1)) {
 			return 0;
 		} else {
 			return 1;
 		}
+		
+//		if (a.dbId > this.dbId) {
+//			return -1;
+//		} else if (a.dbId == this.dbId) {
+//			return 0;
+//		} else {
+//			return 1;
+//		}
 	}
 
 	/**
@@ -207,13 +233,33 @@ public class Article implements Serializable, Comparable<Article>,
 	 */
 	@Override
 	public int compare(Article lhs, Article rhs) {
-		if (lhs.getDbId() > rhs.getDbId()) {
+		
+		SimpleDateFormat df = new SimpleDateFormat(
+				"EEE, dd MMM yyyy kk:mm:ss Z", Locale.ENGLISH);
+		Date pDate1 = new Date();
+		Date pDate2 = new Date();
+		try {
+			pDate1 = df.parse(lhs.getPubDate());
+			pDate2 = df.parse(rhs.getPubDate());
+		} catch (ParseException e) {
+			Log.e("DATE PARSING", "Error parsing date..");
+		}
+		
+		if (pDate2.before(pDate1)) {
 			return -1;
-		} else if (lhs.getDbId() == rhs.getDbId()) {
+		} else if (pDate2.equals(pDate1)) {
 			return 0;
 		} else {
 			return 1;
 		}
+		
+//		if (lhs.getDbId() > rhs.getDbId()) {
+//			return -1;
+//		} else if (lhs.getDbId() == rhs.getDbId()) {
+//			return 0;
+//		} else {
+//			return 1;
+//		}
 	}
 
 }

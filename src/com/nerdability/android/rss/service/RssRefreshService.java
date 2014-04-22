@@ -27,7 +27,7 @@ import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.util.Log;
 
-import com.nerdability.android.ArticleListActivity;
+import com.nerdability.android.MainActivity;
 import com.nerdability.android.R;
 import com.nerdability.android.container.ArticleContent;
 import com.nerdability.android.db.DbAdapter;
@@ -66,14 +66,19 @@ public class RssRefreshService extends IntentService {
 					if (fetchedArticle == null) {
 						dba = new DbAdapter(getApplicationContext());
 						dba.openToWrite();
-						dba.insertBlogListingWithData(a.getGuid(),
+						long dbId = dba.insertBlogListingWithData(a.getGuid(),
 								a.getTitle(), a.getDescription(),
 								a.getPubDate(), a.getAuthor(), a.getUrl(),
 								a.getEncodedContent());
-						a = dba.getBlogListing(a.getGuid());
 						dba.close();
+						a.setDbId(dbId);
+						
 						ArticleContent.addItem(a);
 						newData = true;
+					}else{
+						if(ArticleContent.ITEMS_MAP.get(a.getGuid()) == null){
+							ArticleContent.addItem(a);
+						}
 					}
 				}
 				if (newData) {
@@ -146,7 +151,7 @@ public class RssRefreshService extends IntentService {
 				.getNotifications_new_rss_feed(getApplicationContext())) {
 
 			Intent i = new Intent(getApplicationContext(),
-					ArticleListActivity.class);
+					MainActivity.class);
 			PendingIntent pIntent = PendingIntent.getActivity(
 					getApplicationContext(), 0, i, 0);
 

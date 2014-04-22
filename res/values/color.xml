@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- <color name="list_item_title">#fff</color> -->
+    <color name="list_item_title">#0065BD</color>
+    <!-- <color name="list_background">#303030</color> -->
+    <color name="list_background">#FFFFFF</color>
+    <!-- <color name="list_background_pressed">#992416</color> -->
+    <color name="list_background_pressed">#FED100</color>
+    <!-- <color name="list_divider">#272727</color> -->
+    <color name="list_divider">#FED100</color>
+    <color name="counter_text_bg">#626262</color>
+    <color name="counter_text_color">#c5c4c4</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blue">#0065BD</color>
+    <color name="yellow">#FED100</color>
+    <color name="red">#992416</color>
+
+</resources>

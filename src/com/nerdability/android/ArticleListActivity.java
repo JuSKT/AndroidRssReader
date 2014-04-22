@@ -1,24 +1,20 @@
 package com.nerdability.android;
 
-import java.util.Calendar;
-
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.nerdability.android.adapter.ArticleListAdapter;
 import com.nerdability.android.container.ArticleContent;
 import com.nerdability.android.db.DbAdapter;
 import com.nerdability.android.model.Article;
-import com.nerdability.android.preferences.AppPreferences;
 import com.nerdability.android.rss.service.RssRefreshService;
 
 public class ArticleListActivity extends FragmentActivity implements
@@ -41,11 +37,11 @@ public class ArticleListActivity extends FragmentActivity implements
 					ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getSupportFragmentManager()
 							.findFragmentById(R.id.article_list))
 							.getListAdapter();
-					if (ArticleContent.ITEMS.isEmpty()) {
+					if (ArticleContent.ITEMS_MAP.isEmpty()) {
 						dba.openToRead();
 						ArticleContent.addItems(dba.getAllArticles());
 						dba.close();
-					} 
+					}
 					adapter.addAll(ArticleContent.cloneList());
 					adapter.notifyDataSetChanged();
 				} else {
@@ -65,13 +61,15 @@ public class ArticleListActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_article_list);
 
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
 		if (findViewById(R.id.article_detail_container) != null) {
 			mTwoPane = true;
 			((ArticleListFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.article_list))
 					.setActivateOnItemClick(true);
 		}
-		
+
 		dba = new DbAdapter(this);
 	}
 
@@ -130,5 +128,15 @@ public class ArticleListActivity extends FragmentActivity implements
 			detailIntent.putExtra(Article.KEY, selected);
 			startActivity(detailIntent);
 		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 }

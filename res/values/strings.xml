@@ -1,15 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Droid RSS Reader</string>
+    <!-- APP -->
+    <string name="app_name">The Ombudsman</string>
+
+    <!-- TITLE OF ACTIVITIES -->
+    <string name="title_activity_main">The Ombudsman</string>
     <string name="title_article_detail">Post Detail</string>
-    <string name="title_article_list">Droid RSS Reader</string>
+    <string name="title_article_list">RSS Reader</string>
+
+    <!-- BUTTONS -->
     <string name="btn_offline_reading">Save for later</string>
     <string name="btn_mark_unread">Mark unread</string>
     <string name="btn_refresh">Refresh</string>
-    <string name="btn_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+<!--     <string name="btn_settings">Settings</string> -->
+    <string name="btn_open">Open</string>
+    
+    <!-- NAVIGATION DRAWER -->
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+
+    <!-- Nav Drawer Menu Items -->
+    <!-- <string-array name="nav_drawer_items"> -->
+    <!-- <item >Home</item> -->
+    <!-- <item >People</item> -->
+    <!-- <item >Photos</item> -->
+    <!-- <item >Communities</item> -->
+    <!-- <item >Pages</item> -->
+    <!-- <item >Hot news</item> -->
+    <!-- </string-array> -->
+
+    <string-array name="nav_drawer_items">
+        <item>Home</item>
+        <item>Presentation</item>
+        <item>Want to complain?</item>
+        <item>Communities</item>
+        <item>Photos</item>
+        <item>Hot news</item>
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <!-- <array name="nav_drawer_icons"> -->
+    <!-- <item>@drawable/ic_home</item> -->
+    <!-- <item>@drawable/ic_people</item> -->
+    <!-- <item>@drawable/ic_photos</item> -->
+    <!-- <item>@drawable/ic_communities</item> -->
+    <!-- <item>@drawable/ic_pages</item> -->
+    <!-- <item>@drawable/ic_whats_hot</item> -->
+    <!-- </array> -->
+
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_people</item>
+        <item>@drawable/ic_pages</item>
+        <item>@drawable/ic_communities</item>
+        <item>@drawable/ic_photos</item>
+        <item>@drawable/ic_whats_hot</item>
+    </array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+
+    <!-- HOME -->
+    <string name="home_body_name_text">The European Ombudsman.</string>
+    <string name="home_body_title_text">The European Ombudsman investigates complaints about maladministration in the institutions and bodies of the European Union.</string>
+    <string name="home_body_text">If you are a citizen of a Member State of the Union or reside in a Member State, you can make a complaint to the European Ombudsman. Businesses, associations or other bodies with a registered office in the Union may also complain to the Ombudsman.</string>
+
+    <!-- PRESENTATION -->
+    <string name="presentation_body_header_text">By clicking on the top right button, you are going to open a PDF that explain the work of the European Ombudsman.</string>
+    <string name="presentation_body_warning_text">Before you click on the button, please make sure that you have a PDF reader installed on your device. Otherwise, please install one like Acrobat Reader.</string>
 
 </resources>

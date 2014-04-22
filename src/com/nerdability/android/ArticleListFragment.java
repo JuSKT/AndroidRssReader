@@ -1,7 +1,6 @@
 package com.nerdability.android;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.Menu;
@@ -13,7 +12,6 @@ import android.widget.ListView;
 import com.nerdability.android.adapter.ArticleListAdapter;
 import com.nerdability.android.container.ArticleContent;
 import com.nerdability.android.db.DbAdapter;
-import com.nerdability.android.model.Article;
 import com.nerdability.android.preferences.AppPreferences;
 import com.nerdability.android.rss.task.RssRefreshTask;
 
@@ -42,12 +40,16 @@ public class ArticleListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		if (ArticleContent.ITEMS.isEmpty()) {
+		
+		if (ArticleContent.ITEMS_MAP.isEmpty()) {
 			DbAdapter dba = new DbAdapter(getActivity());
 			dba.openToRead();
 			ArticleContent.addItems(dba.getAllArticles());
 			dba.close();
+			//For the first time the person launch the application
+//			if (ArticleContent.ITEMS.isEmpty()) {
+//				refreshList();
+//			}
 		}
 
 		ArticleListAdapter adapter = new ArticleListAdapter(getActivity(),
@@ -125,11 +127,12 @@ public class ArticleListFragment extends ListFragment {
 		if (id == R.id.actionbar_refresh) {
 			refreshList();
 			return true;
-		} else if (id == R.id.actionbar_settings) {
-			Intent settingsIntent = new Intent(getActivity(),
-					SettingsActivity.class);
-			startActivity(settingsIntent);
-		}
+		} 
+//		else if (id == R.id.actionbar_settings) {
+//			Intent settingsIntent = new Intent(getActivity(),
+//					SettingsActivity.class);
+//			startActivity(settingsIntent);
+//		}
 		return false;
 	}
 

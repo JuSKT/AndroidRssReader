@@ -7,7 +7,7 @@
     android:layout_marginRight="16dp"
     android:divider="?android:attr/dividerHorizontal"
     android:showDividers="middle"
-    tools:context=".ArticleListActivity">
+    tools:context=".MainActivity">
 
     <fragment android:name="com.nerdability.android.ArticleListFragment"
         android:id="@+id/article_list"

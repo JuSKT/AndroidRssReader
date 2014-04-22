@@ -1,3 +1,6 @@
+<!-- <resources> -->
+<!--     <item type="layout" name="activity_article_list">@layout/activity_article_twopane</item> -->
+<!-- </resources> -->
 <resources>
-    <item type="layout" name="activity_article_list">@layout/activity_article_twopane</item>
+    <item type="layout" name="activity_main">@layout/activity_main_twopane</item>
 </resources>

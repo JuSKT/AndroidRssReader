@@ -88,12 +88,12 @@ public class ArticleDetailFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		Log.d("item ID : ", "onOptionsItemSelected Item ID" + id);
-//		if (id == R.id.actionbar_saveoffline) {
-//			Toast.makeText(getActivity().getApplicationContext(),
-//					"This article has been saved of offline reading.",
-//					Toast.LENGTH_LONG).show();
-//			return true;
-//		} else 
+		// if (id == R.id.actionbar_saveoffline) {
+		// Toast.makeText(getActivity().getApplicationContext(),
+		// "This article has been saved of offline reading.",
+		// Toast.LENGTH_LONG).show();
+		// return true;
+		// } else
 		if (id == R.id.actionbar_markunread) {
 			db.openToWrite();
 			db.markAsUnread(displayedArticle.getGuid());

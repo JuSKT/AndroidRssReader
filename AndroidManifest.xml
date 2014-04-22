@@ -6,24 +6,20 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="15" />
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:icon="@drawable/rssicon"
+        android:allowBackup="true"
+        android:icon="@drawable/ombudsman_logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.MyAppTheme" >
         <activity
             android:name="com.nerdability.android.ArticleListActivity"
             android:label="@string/title_article_list" >
-<!--             <intent-filter> -->
-<!--                 <action android:name="android.intent.action.MAIN" /> -->
-
-<!--                 <category android:name="android.intent.category.LAUNCHER" /> -->
-<!--             </intent-filter> -->
         </activity>
         <activity
             android:name="com.nerdability.android.ArticleDetailActivity"
@@ -49,12 +45,23 @@
         <activity
             android:name="com.nerdability.android.MainActivity"
             android:label="@string/title_activity_main" >
+            <meta-data
+                android:name="android.support.UI_OPTIONS"
+                android:value="splitActionBarWhenNarrow" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="com.nerdability.android.util.PdfContentProvider"
+            android:authorities="com.nerdability.android.util.PdfContentProvider"
+            android:enabled="true"
+            android:exported="true" >
+        </provider>
     </application>
 
 </manifest>
